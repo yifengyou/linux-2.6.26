@@ -40,3 +40,5 @@ obj-$(CONFIG_IPV6_TUNNEL) += ip6_tunnel.o
 obj-y += addrconf_core.o exthdrs_core.o
 
 obj-$(subst m,y,$(CONFIG_IPV6)) += inet6_hashtables.o
+
+CFLAGS_ipv6_sockglue.o = -O2

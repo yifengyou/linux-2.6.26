@@ -332,7 +332,17 @@ KBUILD_CPPFLAGS := -D__KERNEL__ $(LINUXINCLUDE)
 
 KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
-		   -Werror-implicit-function-declaration
+		   -Werror-implicit-function-declaration -Wno-unused-but-set-variable \
+		   -fno-pie -Wno-format-security \
+		   -Wno-unused-function \
+		   -Wno-maybe-uninitialized \
+		   -Wno-sequence-point \
+		   -Wno-sizeof-pointer-memaccess \
+		   -Wno-deprecated-declarations \
+		   -Wno-enum-compare \
+		   -Wno-strict-aliasing \
+		   -Wno-unused-local-typedefs 
+
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -431,7 +441,7 @@ ifeq ($(config-targets),1)
 include $(srctree)/arch/$(SRCARCH)/Makefile
 export KBUILD_DEFCONFIG
 
-config %config: scripts_basic outputmakefile FORCE
+%config: scripts_basic outputmakefile FORCE
 	$(Q)mkdir -p include/linux include/config
 	$(Q)$(MAKE) $(build)=scripts/kconfig $@
 
@@ -502,9 +512,9 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
+KBUILD_CFLAGS	+= -O0
 else
-KBUILD_CFLAGS	+= -O2
+KBUILD_CFLAGS	+= -O0
 endif
 
 ifneq (CONFIG_FRAME_WARN,0)
@@ -1547,7 +1557,7 @@ endif
 	$(Q)$(MAKE) $(build)=$(build-dir) $(target-dir)$(notdir $@)
 
 # Modules
-/ %/: prepare scripts FORCE
+%/: prepare scripts FORCE
 	$(cmd_crmodverdir)
 	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
 	$(build)=$(build-dir)
