@@ -166,7 +166,7 @@ int xfrm6_extract_header(struct sk_buff *skb)
 static struct xfrm_state_afinfo xfrm6_state_afinfo = {
 	.family			= AF_INET6,
 	.proto			= IPPROTO_IPV6,
-	.eth_proto		= htons(ETH_P_IPV6),
+	//.eth_proto		= htons(ETH_P_IPV6),
 	.owner			= THIS_MODULE,
 	.init_tempsel		= __xfrm6_init_tempsel,
 	.tmpl_sort		= __xfrm6_tmpl_sort,
@@ -179,6 +179,7 @@ static struct xfrm_state_afinfo xfrm6_state_afinfo = {
 
 int __init xfrm6_state_init(void)
 {
+	xfrm6_state_afinfo.eth_proto = htons(ETH_P_IPV6);
 	return xfrm_state_register_afinfo(&xfrm6_state_afinfo);
 }
 
